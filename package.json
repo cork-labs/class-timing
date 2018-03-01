@@ -1,6 +1,6 @@
 {
   "name": "@cork-labs/http-middleware-timing",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Express middleware, captures request elapsed time(s)",
   "license": "MIT",
   "homepage": "https://github.com/cork-labs/http-middleware-timing",
