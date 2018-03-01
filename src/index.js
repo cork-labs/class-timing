@@ -1,16 +1,23 @@
 'use strict';
 
-const defaults = {};
+const Timing = require('./timing');
+
+const defaults = {
+  keys: {}
+};
+
+const defaultKeys = {
+  start: 'start'
+};
 
 const response = function (config) {
   config = Object.assign({}, defaults, config);
+  config.keys = Object.assign({}, defaultKeys, config.keys);
 
   // -- middleware
 
   return function (req, res, next) {
-    req.ts = {
-      started: new Date()
-    };
+    req.timing = new Timing(req, config.keys.start);
     next();
   };
 };

@@ -16,42 +16,79 @@ app.use(httpTiming());
 
 // your route
 app.get('/path', (req, res, next) => {
-  res.setCookie('name', 'value');
+  console.log(req.elapsed()); // miliseconds since request was first processed
 })
 ```
 
 
 ## API
 
-### res.setCookie(name, value[, maxAge])
 
-Sets a cookie valid for the provided `maxAge` (in seconds).
+### req.timing.add(key)
 
-If no `maxAge` provided will use the one provided at configuration time.
+Stores a timestamp with the provided key.
 
-### res.setSessionCookie(name, value)
-
-Sets a cookie valid for the session only.
-
-
-## Configuration
-
-The middleware can be configured via an options object when calling its factory function.
+The key `total` is reserved and will throw an error if used.
 
 ```javascript
-const options = { domain: 'example.com', maxAge: 24 * 60 * 60 };
-app.use(httpTiming(options));
+req.timing.add('render');
+```
+### req.timing.get()
+
+Returns the stored timestamps as key/values.
+
+```javascript
+req.timing.get(); // { start: Date, render: Date, output: Date }
 ```
 
-### domain (default: null)
+### req.timing.get(key)
 
-All cookies set are valid for this domain.
+Returns only the specified timestamp.
 
-### maxAge (default: null)
+If the key is unkmnown, it will throw an error.
 
-Default time to live (in seconds) for cookies set with `setCookie()`.
+```javascript
+req.timing.get('start');
+```
 
-If no default is configured, `setCookie()` will act as `setSessionCookie()`
+### req.timing.elapsed()
+
+Returns all the elapsed times, in miliseconds, between timestamps.
+
+An additional `total` key is returned with the total time elapsed in miliseconds.
+
+```javascript
+req.timing.elapsed(); // { route: 1, process: 5, render: 2, output: 1, total: 9 }
+```
+
+### req.timing.total()
+
+Elapsed time since request was first processed, in miliseconds.
+
+```javascript
+req.timing.total(); // 9
+```
+### req.timing.from(key)
+
+Elapsed time since timestamp was added, in miliseconds.
+
+```javascript
+req.from('process'); // 3
+```
+
+### req.timing.of(key)
+
+Elapsed time between the previous timestamp and the specified one, in miliseconds.
+```javascript
+req.of('process'); // 5
+```
+
+### req.timing.until(key)
+
+Elapsed time since request first processed until timestamp, in miliseconds.
+```javascript
+req.until('process'); // 6
+```
 
 
 ## Develop
@@ -83,6 +120,7 @@ Check [CONTRIBUTING](https://github.com/cork-labs/contributing/blob/master/CONTR
 ## Tools
 
 - [npm-bump](https://www.npmjs.com/package/npm-bump)
+- [timekeeper](https://github.com/vesln/timekeeper)
 - [chai](http://chaijs.com/api/)
 - [sinon](http://sinonjs.org/)
 - [sinon-chai](https://github.com/domenic/sinon-chai)
