@@ -1,25 +1,71 @@
 'use strict';
 
-const Timing = require('./timing');
+class Timing {
+  constructor (startingKey = 'start', totalKey = 'total') {
+    this._totalKey = totalKey;
+    this._ts = {};
+    this._seq = [startingKey];
+    this._ts[startingKey] = new Date();
+  }
 
-const defaults = {
-  keys: {}
-};
+  get (key) {
+    if (!key) {
+      return Object.assign({}, this._ts);
+    } else if (!this._ts[key]) {
+      throw new Error(`Unknown timestamp "${key}".`);
+    }
+    return this._ts[key];
+  }
 
-const defaultKeys = {
-  start: 'start'
-};
+  add (key) {
+    this._seq.push(key);
+    this._ts[key] = new Date();
+  }
 
-const response = function (config) {
-  config = Object.assign({}, defaults, config);
-  config.keys = Object.assign({}, defaultKeys, config.keys);
+  elapsed () {
+    return this._seq.reduce((acc, item, index) => {
+      acc[this._totalKey] = acc[this._totalKey] || 0;
+      if (index) {
+        const prevKey = this._seq[index - 1];
+        const currentKey = this._seq[index];
+        const elapsed = this._ts[currentKey] - this._ts[prevKey];
+        acc[currentKey] = elapsed;
+        acc[this._totalKey] += elapsed;
+      }
+      return acc;
+    }, {});
+  }
 
-  // -- middleware
+  total () {
+    const last = this._seq[this._seq.length - 1];
+    const firstKey = this._seq[0];
+    return this._ts[last] - this._ts[firstKey];
+  }
 
-  return function (req, res, next) {
-    req.timing = new Timing(req, config.keys.start);
-    next();
-  };
-};
+  from (key) {
+    if (!this._ts[key]) {
+      throw new Error(`Unknown timestamp "${key}".`);
+    }
+    const lastKey = this._seq[this._seq.length - 1];
+    return this._ts[lastKey] - this._ts[key];
+  }
 
-module.exports = response;
+  of (key) {
+    if (!this._ts[key]) {
+      throw new Error(`Unknown timestamp "${key}".`);
+    }
+    const index = this._seq.indexOf(key);
+    const prevKey = this._seq[index - 1];
+    return this._ts[key] - this._ts[prevKey];
+  }
+
+  until (key) {
+    if (!this._ts[key]) {
+      throw new Error(`Unknown timestamp "${key}".`);
+    }
+    const firstKey = this._seq[0];
+    return this._ts[key] - this._ts[firstKey];
+  }
+}
+
+module.exports = Timing;

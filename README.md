@@ -1,93 +1,107 @@
-# HTTP Middleware Timing
+# Classes Timing
 
-> Express middleware, captures request elapsed time(s)`.
+> Pure class, captures timestamps, exposes elapsed times.
 
 
 ## Getting Started
 
 ```shell
-npm install --save @cork-labs/http-middleware-timing
+npm install --save @cork-labs/classes-timing
 ```
 
 ```javascript
-// your application setup
-const httpTiming = require('@cork-labs/http-middleware-timing');
-app.use(httpTiming());
+const Timing = require('@cork-labs/classes-timing');
 
-// your route
-app.get('/path', (req, res, next) => {
-  console.log(req.elapsed()); // miliseconds since request was first processed
-})
+const time = new Timing('start');
+setTimeout(() => time.add('mark1'), 1000);
+setTimeout(() => time.add('mark2'), 1500);
+setTimeout(() => console.log(timing.elapsed()), 2000) // elapsed times { mark1: 1000, mark2: 500, total: 1500 }
+setTimeout(() => {
+  console.log(time.from('mark1')); // 500
+  console.log(time.of('mark2')); // 500
+  console.log(time.until('mark2')); // 1500
+  console.log(time.total()); // 1500
+}, 3000);
 ```
 
 
 ## API
 
+### new Timing([startKey [, totalKey]])
 
-### req.timing.add(key)
+Creates an instance of `Timing`, optionally customising the `start` and `total` keys.
+
+- `startKey` - defaults to `'start'`
+- `totalKey` - defaults to `'total'`
+
+```javascript
+const timing = new Timing('started', 'elapsed');
+```
+
+### timing.add(key)
 
 Stores a timestamp with the provided key.
 
-The key `total` is reserved and will throw an error if used.
+If key is already added or equals the `startKey` or `totalKey` it will throw an error.
 
 ```javascript
-req.timing.add('render');
+timing.add('render');
 ```
-### req.timing.get()
+### timing.get()
 
 Returns the stored timestamps as key/values.
 
 ```javascript
-req.timing.get(); // { start: Date, render: Date, output: Date }
+timing.get(); // { start: Date, render: Date, output: Date }
 ```
 
-### req.timing.get(key)
+### timing.get(key)
 
 Returns only the specified timestamp.
 
-If the key is unkmnown, it will throw an error.
+If the key is unknown, it throws an error.
 
 ```javascript
-req.timing.get('start');
+timing.get('start');
 ```
 
-### req.timing.elapsed()
+### timing.elapsed()
 
 Returns all the elapsed times, in miliseconds, between timestamps.
 
-An additional `total` key is returned with the total time elapsed in miliseconds.
+AThe additional `total` key is returned with the total time elapsed in miliseconds.
 
 ```javascript
-req.timing.elapsed(); // { route: 1, process: 5, render: 2, output: 1, total: 9 }
+timing.elapsed(); // { route: 1, process: 5, render: 2, output: 1, total: 9 }
 ```
 
-### req.timing.total()
+### timing.total()
 
-Elapsed time since request was first processed, in miliseconds.
+Elapsed time since instantiated, in miliseconds.
 
 ```javascript
-req.timing.total(); // 9
+timing.total(); // 9
 ```
-### req.timing.from(key)
+### timing.from(key)
 
 Elapsed time since timestamp was added, in miliseconds.
 
 ```javascript
-req.from('process'); // 3
+timing.from('process'); // 3
 ```
 
-### req.timing.of(key)
+### timing.of(key)
 
 Elapsed time between the previous timestamp and the specified one, in miliseconds.
 ```javascript
-req.of('process'); // 5
+timing.of('process'); // 5
 ```
 
-### req.timing.until(key)
+### timing.until(key)
 
-Elapsed time since request first processed until timestamp, in miliseconds.
+Elapsed time since instantiation until timestamp, in miliseconds.
 ```javascript
-req.until('process'); // 6
+timing.until('process'); // 6
 ```
 
 

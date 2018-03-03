@@ -1,13 +1,13 @@
 {
-  "name": "@cork-labs/http-middleware-timing",
+  "name": "@cork-labs/classes-timing",
   "version": "0.1.1-pre",
-  "description": "Express middleware, captures request elapsed time(s)",
+  "description": "Pure class, captures timestamps, exposes elapsed times",
   "license": "MIT",
-  "homepage": "https://github.com/cork-labs/http-middleware-timing",
+  "homepage": "https://github.com/cork-labs/classes-timing",
   "author": "Andre Torgal <andre.torgal@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cork-labs/http-middleware-timing.git"
+    "url": "https://github.com/cork-labs/classes-timing.git"
   },
   "main": "src/index.js",
   "scripts": {
