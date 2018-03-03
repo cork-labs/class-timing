@@ -1,6 +1,6 @@
 {
   "name": "@cork-labs/classes-timing",
-  "version": "0.1.1-pre",
+  "version": "0.2.0",
   "description": "Pure class, captures timestamps, exposes elapsed times",
   "license": "MIT",
   "homepage": "https://github.com/cork-labs/classes-timing",
