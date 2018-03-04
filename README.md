@@ -6,11 +6,11 @@
 ## Getting Started
 
 ```shell
-npm install --save @cork-labs/classes-timing
+npm install --save @cork-labs/class-timing
 ```
 
 ```javascript
-const Timing = require('@cork-labs/classes-timing');
+const Timing = require('@cork-labs/class-timing');
 
 const time = new Timing('start');
 setTimeout(() => time.add('mark1'), 1000);

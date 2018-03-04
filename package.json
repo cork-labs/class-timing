@@ -1,13 +1,13 @@
 {
-  "name": "@cork-labs/classes-timing",
+  "name": "@cork-labs/class-timing",
   "version": "0.2.1-pre",
   "description": "Node.js class, captures timestamps, exposes elapsed times",
   "license": "MIT",
-  "homepage": "https://github.com/cork-labs/classes-timing",
+  "homepage": "https://github.com/cork-labs/class-timing",
   "author": "Andre Torgal <andre.torgal@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cork-labs/classes-timing.git"
+    "url": "https://github.com/cork-labs/class-timing.git"
   },
   "main": "src/index.js",
   "scripts": {
