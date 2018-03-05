@@ -73,7 +73,6 @@ describe('Timing', function () {
       describe('when elapsed() is invoked', function () {
         it('should return the elapsed times', function () {
           const result = this.timing.elapsed();
-          console.log(result);
           expect(result).to.be.an('object');
           expect(result.foo).to.equal(3);
           expect(result.bar).to.equal(2);
