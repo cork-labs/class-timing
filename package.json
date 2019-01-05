@@ -1,6 +1,6 @@
 {
   "name": "@cork-labs/class-timing",
-  "version": "0.3.1",
+  "version": "0.3.2-pre",
   "description": "Node.js class, captures timestamps, exposes elapsed times",
   "license": "MIT",
   "homepage": "https://github.com/cork-labs/class-timing",
