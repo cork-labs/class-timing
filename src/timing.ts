@@ -1,10 +1,14 @@
 import { ITimingData } from './interfaces/timing-data';
 
+export interface ITimingDict {
+  [key: string]: number;
+}
+
 export class Timing {
 
   private startingKey: string;
   private totalKey: string;
-  private ts: { [key: string]: number };
+  private ts: ITimingDict;
   private seq: string[];
 
   constructor (date?: number, startingKey: string = 'start', totalKey: string = 'total') {
@@ -15,10 +19,16 @@ export class Timing {
     this.ts[startingKey] = date || Date.now();
   }
 
-  public get (key: string) {
-    if (!key) {
-      return Object.assign({}, this.ts);
-    } else if (!this.ts[key]) {
+  get start (): number {
+    return this.ts[this.startingKey];
+  }
+
+  get times (): ITimingDict {
+    return Object.assign({}, this.ts);
+  }
+
+  public get (key: string): ITimingDict | number {
+    if (!this.ts[key]) {
       throw new Error(`Unknown key "${key}".`);
     }
     return this.ts[key];
